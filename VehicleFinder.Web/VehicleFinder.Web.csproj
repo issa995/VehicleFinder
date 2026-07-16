@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\VehicleFinder.Application\VehicleFinder.Application.csproj" />
+    <ProjectReference Include="..\src\VehicleFinder.Infrastructure\VehicleFinder.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
