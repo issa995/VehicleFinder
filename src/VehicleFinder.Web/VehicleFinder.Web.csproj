@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\VehicleFinder.Application\VehicleFinder.Application.csproj" />
-    <ProjectReference Include="..\src\VehicleFinder.Infrastructure\VehicleFinder.Infrastructure.csproj" />
+    <ProjectReference Include="..\VehicleFinder.Application\VehicleFinder.Application.csproj" />
+    <ProjectReference Include="..\VehicleFinder.Infrastructure\VehicleFinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
