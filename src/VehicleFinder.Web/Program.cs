@@ -1,7 +1,19 @@
+using VehicleFinder.Application.Interfaces;
+using VehicleFinder.Infrastructure.Nhtsa.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var nhtsaBaseUrl = builder.Configuration["NhtsaApi:BaseUrl"] ?? throw new InvalidOperationException("NHTSA API base URL is not configured.");
+
+builder.Services.AddHttpClient<INhtsaVehicleService, NhtsaVehicleService>(
+    httpClient =>
+    {
+        httpClient.BaseAddress = new Uri(nhtsaBaseUrl);
+        httpClient.Timeout = TimeSpan.FromSeconds(30);
+    });
 
 var app = builder.Build();
 
