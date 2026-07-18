@@ -1,0 +1,172 @@
+﻿@model VehicleFinder.Web.Models.VehicleSearchViewModel
+
+@{
+    ViewData["Title"] = "Vehicle Finder";
+
+    var maximumYear = DateTime.UtcNow.Year + 1;
+
+    var isPostRequest = string.Equals(Context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase);
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/vehicle-search.css" asp-append-version="true" />
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="mb-4">
+                        <h1 class="h2 mb-2">Vehicle Finder</h1>
+
+                        <p class="text-muted mb-0">
+                            Select a car make, manufacturing year, and vehicle type to find available models.
+                        </p>
+                    </div>
+
+                    <form asp-controller="VehicleSearch" asp-action="Search" method="post" id="vehicleSearchForm" data-vehicle-types-url="@Url.Action("GetVehicleTypes", "VehicleSearch")">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert">
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label asp-for="MakeId" class="form-label">
+                                </label>
+
+                                <select asp-for="MakeId" class="form-select js-make-select" id="makeSelect">
+
+                                    <option value="">
+                                        Select a car make
+                                    </option>
+
+                                    @foreach (var make in Model.Makes)
+                                    {
+                                        <option value="@make.MakeId">
+                                            @make.MakeName
+                                        </option>
+                                    }
+                                </select>
+
+                                <span asp-validation-for="MakeId" class="text-danger">
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ModelYear" class="form-label">
+                                </label>
+
+                                <input asp-for="ModelYear"
+                                       type="number"
+                                       min="1996"
+                                       max="@maximumYear"
+                                       class="form-control"
+                                       placeholder="Example: 2015" />
+
+                                <span asp-validation-for="ModelYear" class="text-danger">
+                                </span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="VehicleType" class="form-label">
+                                </label>
+
+                                <select asp-for="VehicleType"
+                                        class="form-select"
+                                        id="vehicleTypeSelect"
+                                        data-selected-value="@Model.VehicleType">
+
+                                    <option value="">
+                                        Select a vehicle type
+                                    </option>
+
+                                    @foreach (var vehicleType in Model.VehicleTypes)
+                                    {
+                                        <option value="@vehicleType.VehicleTypeName">
+                                            @vehicleType.VehicleTypeName
+                                        </option>
+                                    }
+                                </select>
+
+                                <span asp-validation-for="VehicleType" class="text-danger">
+                                </span>
+
+                                <div id="vehicleTypeLoadError"
+                                     class="text-danger mt-1"
+                                     role="alert">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary" id="searchButton">
+                                    Search Models
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Models.Count > 0)
+            {
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-body p-4">
+
+                        <h2 class="h4 mb-3">
+                            Available Models
+                        </h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var vehicleModel in Model.Models)
+                                    {
+                                        <tr>
+                                            <td>@vehicleModel.MakeName</td>
+                                            <td>@vehicleModel.ModelName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            else if (isPostRequest && ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-info mt-4" role="status">
+                    No vehicle models were found for the selected criteria.
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/select2/js/select2.min.js" asp-append-version="true"></script>
+
+    <script src="~/js/vehicle-search.js" asp-append-version="true"></script>
+}
