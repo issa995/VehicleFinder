@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/TestResults/
+
+.vs/
+.git/
+.github/
+
+**/*.user
+**/*.suo
+**/*.cache
+**/*.log
+
+Dockerfile*
+docker-compose*
